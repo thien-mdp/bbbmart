@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: "ConCung";
+    src: local("ConCung"),
+    url("./assets/fonts/ConCung-Font.ttf") format("truetype");
+}

@@ -68,7 +68,7 @@ const Header = () => {
       <img className='h-full bg-cover w-full invert' src="https://concung.com//img/adds/2023/02/1677569888-CASHBACK-TOP.png"/>
     </div>
     <div ref={headerRef} className='bg-teal-700 sm:h-[80px] md:h-[80px] z-[140] flex items-center font-ConCung w-full top-0 left-0'>
-      <div className='xs:mx-[10%] md:mx-[20%] flex items-center justify-between w-full'>
+      <div className='xs:mx-[5%] md:mx-[20%] flex items-center justify-between w-full'>
 
         <div className='flex items-center justify-between xs:w-[70%] md:w-[75%]'>
           <p onClick={navigateToHome} className='flex w-full'>
@@ -98,7 +98,7 @@ const Header = () => {
                   <BiShoppingBag className='text-3xl text-white hover:text-amber-300'/> 
             </Badge>
           </p>
-          <p onClick={navigateToLogin} className='xs:ml-3 md:ml-6 lg:ml-10 flex items-center hover:text-amber-300 cursor-pointer text-xl '>
+          <p onClick={navigateToLogin} className=' xs:ml-6 md:ml-6 lg:ml-10 flex items-center hover:text-amber-300 cursor-pointer text-xl '>
             <p className='min-w-[94px]'>Đăng nhập</p>
           </p>
         </div>

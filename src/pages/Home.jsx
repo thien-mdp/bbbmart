@@ -22,9 +22,7 @@ const Home = () => {
     const res = await axios('https://dummyjson.com/products?limit=100');
     if (res.status == 200) {
       setProducts(res.data.products);
-      setTimeout(() => {
-        setLoading(false)
-      }, 1500)
+      setLoading(false)
     }
   };
   useEffect(() => {

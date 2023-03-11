@@ -37,9 +37,7 @@ const ProductDetails = () => {
     const res = await axios('https://dummyjson.com/products?limit=100');
     if (res.status == 200) {
       setProducts(res.data.products);
-      setTimeout(() => {
-        setLoading(false)
-      }, 800)
+      setLoading(false)
     }
   };
 
@@ -209,27 +207,27 @@ const ProductDetails = () => {
             <div className='Rating'>
               <p className='py-2 text-2xl mr-2 mb-3 min-w-fit font-ConCung'>Đánh giá sản phẩm: </p>
               <div className='flex items-center'>
-                <Avatar src={`https://i.pravatar.cc/`} size={64} />
+                <Avatar size={64} >m.dpt_</Avatar>
                 <div className='ml-5'>
                   <p className='font-semibold text-xl'>m.dpt_</p>
-                  <Rate value={5} />
+                  <Rate value={5} disabled />
                   <p>Sản phẩm này sài thích lắm nè</p>
                 </div>
               </div>
               <Divider />
               {
                 listReview?.map((item,index) =>
-                  <>
+                  <div key={index}>
                     <div className='flex items-center'>
-                      <Avatar src={`https://i.pravatar.cc/1${index}00`} size={64} />
+                      <Avatar size={64}>{(item.userName).charAt(0).toUpperCase()}</Avatar>
                       <div className='ml-5'>
                         <p className='font-semibold text-xl'>{item.userName}</p>
-                        <Rate value={item.rating} />
+                        <Rate value={item.rating} disabled />
                         <p>{item.text}</p>
                       </div>
                     </div>
                     <Divider />
-                  </>
+                  </div>
                 )
               }
               {/* <List.Item>

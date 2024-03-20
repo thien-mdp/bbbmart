@@ -31,7 +31,7 @@ const Checkout = () => {
   }
   return (
     <Helmet title='Thanh toán'>
-      <section className='xs:mx-2 md:mx-[20%] my-10 xs:grid lg:flex font-mono min-h-[630px]'>
+      <section className='xs:mx-2 md:mx-[10%] my-10 xs:grid lg:flex font-mono min-h-[630px]'>
         <div className='w-full p-5 bg-white rounded-md'>
           <h1 className='text-3xl font-bold text-center font-ConCung text-teal-600 mb-10 underline underline-offset-4'>Thanh toán</h1>
           <Form

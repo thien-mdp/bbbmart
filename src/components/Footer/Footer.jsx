@@ -7,7 +7,7 @@ const Footer = () => {
       {/* <div className='mx-[10%] grid grid-cols-4 gap-4 my-5'>
         <Services/>
       </div> */}
-      <div className='xs:mx-0 md:mx-[20%] flex items-center justify-between text-gray-200'>
+      <div className='xs:mx-0 md:mx-[10%] flex items-center justify-between text-gray-200'>
         <div className='w-[40%] bg-emerald-700 rounded-tr-2xl rounded-bl-2xl px-5 pt-2 pb-4 '>
           <h1 className='text-2xl mb-2'>Công ty cổ phần BBB</h1>
           <div className='text-[15px] font-mono font-light truncate'>

@@ -113,7 +113,7 @@ const Signup = () => {
   return (
     <Helmet title='Đăng ký'>
       <section>
-        <div className={`mx-[20%] my-10 grid grid-cols-2 xs:grid-cols-1 lg:grid-cols-2 gap-4 font-mono min-h-[510px]`}>
+        <div className={`mx-[10%] my-10 grid grid-cols-2 xs:grid-cols-1 lg:grid-cols-2 gap-4 font-mono min-h-[510px]`}>
           <Form
             layout='vertical'
             name='basic'

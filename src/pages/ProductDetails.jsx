@@ -110,10 +110,10 @@ const ProductDetails = () => {
     <Helmet title={`${product ? product.title : ''}`}>
       <CommoSection />
       {!loading ? (
-        <section className='xs:mx-2 md:mx-[20%] min-h-[90vh] font-mono'>
+        <section className='xs:mx-2 md:mx-[10%] min-h-[90vh] font-mono'>
           <div className='flex my-10'>
             <div className='w-[65%] flex'>
-              <div className='w-[20%] max-h-[400px]'>
+              <div className='w-[10%] max-h-[400px]'>
                 {product?.images.slice(0, 3).map((item, index) => (
                   <img key={index} className='object-cover mx-auto min-w-full my-1 h-auto max-h-[100px] cursor-pointer' src={item} />
                 ))}

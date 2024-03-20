@@ -4,9 +4,10 @@ import Cookies from "js-cookie";
 
 // const { access_token } = useSelector((state) => state.auth.access_token)
 const axiosApi = axios.create({
-  baseURL: 'https://public.kiotapi.com/',
+  baseURL: '/api/',
   header: {
-    'Content-Type': 'application/x-www-form-urlencoded',
+    // 'Content-Type': 'application/json',
+    // 'Content-Type': 'application/x-www-form-urlencoded',
     Retailer: 'bobebedn',
     Cookie: 'ss-id=ns59baG9BIvQIgCa1qZa; ss-pid=g4B2KDRktO99NM5vPHru'
   },
@@ -22,7 +23,5 @@ axiosApi.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 
-// Response interceptor...
-// Giữ nguyên như bạn đã định nghĩa
 
 export default axiosApi;

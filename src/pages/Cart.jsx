@@ -88,7 +88,7 @@ const Cart = () => {
   return (
     <Helmet title={`Giỏ hàng`}>
       {/* <CommoSection title="Giỏ hàng"/> */}
-      <section className='xs:mx-2 md:mx-[20%] my-10 xs:grid lg:flex font-mono min-h-[630px]'>
+      <section className='xs:mx-2 md:mx-[10%] my-10 xs:grid lg:flex font-mono min-h-[630px]'>
         <div className='w-full mr-5'>
           <Table locale={locale} columns={columns} dataSource={data} bordered pagination={false} />
         </div>

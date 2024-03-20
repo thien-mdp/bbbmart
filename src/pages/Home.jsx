@@ -7,6 +7,8 @@ import Helmet from '../components/Helmet/Helmet'
 import Clock from '../components/UI/Clock'
 import ProductList from '../components/UI/ProductList'
 import axiosApi from '../api/axiosApi'
+import Cookies from 'js-cookie'
+import fetchBase from '../api/fetchBase'
 
 const Home = () => {
   const [products, setProducts] = useState([])
@@ -19,10 +21,11 @@ const Home = () => {
   const [homeDecoration, setHomeDecoration] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const fetchDataKiot = async () => {
-    const res = await axiosApi.get('/products?pageSize=100')
-    console.log('Res', res)
+  const fetchDataProduct = async () => {
+    const res = await fetchBase('/api/products?pageSize=100')
+    console.log('product', res.data)
   }
+
   const fetchData = async () => {
     const res = await axios('https://dummyjson.com/products?limit=100')
     if (res.status == 200) {
@@ -32,7 +35,7 @@ const Home = () => {
   }
   useEffect(() => {
     fetchData()
-    fetchDataKiot()
+    fetchDataProduct()
   }, [])
   useEffect(() => {
     const filteredProducts = products.filter((item) => item.category === 'fragrances')
@@ -62,32 +65,41 @@ const Home = () => {
   return (
     <Helmet title={'Trang chủ'}>
       <section className='hero__section '>
-        <div className='mx-[20%]'>
+        <div className='mx-[10%]'>
           <div className='flex w-full'>
-            <div className='w-[70%]'>
-              <Carousel autoplay>
+            <div className='213w-[70%] w-full'>
+              <Carousel infinite autoplay effect='fade' speed='800' autoplaySpeed={2500}>
                 <div>
-                  <img className='w-full h-[400px] bg-cover' src={'https://ss-hn.fptvds.vn/images/2023/02/home-banner_867-x-400.jpg'} />
-                </div>
-                <div>
-                  <img className='w-full h-[400px] bg-cover' src={'https://ss-hn.fptvds.vn/images/2023/02/867x400_a1-20230223030103.jpg'} />
-                </div>
-                <div>
-                  <img className='w-full h-[400px] bg-cover' src={'https://ss-hn.fptvds.vn/images/2023/02/home-banner_867-x-400.jpg'} />
-                </div>
-                <div>
-                  <img className='w-full h-[400px] bg-cover' src={'https://ss-hn.fptvds.vn/images/2023/02/867x400_web.jpg'} />
+                  <img
+                    className='w-full h-[400px] bg-cover rounded-lg'
+                    src={'https://ss-hn.fptvds.vn/images/2023/02/home-banner_867-x-400.jpg'}
+                  />
                 </div>
                 <div>
                   <img
-                    className='w-full h-[400px] bg-cover'
+                    className='w-full h-[400px] bg-cover rounded-lg'
+                    src={'https://ss-hn.fptvds.vn/images/2023/02/867x400_a1-20230223030103.jpg'}
+                  />
+                </div>
+                <div>
+                  <img
+                    className='w-full h-[400px] bg-cover rounded-lg'
+                    src={'https://ss-hn.fptvds.vn/images/2023/02/home-banner_867-x-400.jpg'}
+                  />
+                </div>
+                <div>
+                  <img className='w-full h-[400px] bg-cover rounded-lg' src={'https://ss-hn.fptvds.vn/images/2023/02/867x400_web.jpg'} />
+                </div>
+                <div>
+                  <img
+                    className='w-full h-[400px] bg-cover rounded-lg'
                     src={'https://ss-hn.fptvds.vn/images/2022/main-banner-_trao-rau-cu-qua-sach-01.jpg'}
                   />
                 </div>
               </Carousel>
             </div>
 
-            <div className='w-[30%] ml-1'>
+            {/* <div className='w-[30%] ml-1'>
               <img
                 className='w-full h-[198px] mb-1 bg-cover'
                 src={'https://ss-hn.fptvds.vn/images/2023/02/nam-moi-ron-rang-hang-ngan-uu-dai-614x397.jpg'}
@@ -96,7 +108,7 @@ const Home = () => {
                 className='w-full h-[198px] bg-cover'
                 src={'https://ss-hn.fptvds.vn/images/2022/sub-banner-bua-com-ngon-lanh-copy-01.jpg'}
               />
-            </div>
+            </div> */}
           </div>
 
           <>

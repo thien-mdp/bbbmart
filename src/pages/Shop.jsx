@@ -6,7 +6,7 @@ import Helmet from '../components/Helmet/Helmet'
 const Shop = () => {
   return (
     <Helmet title='Shop'>
-      <CommoSection title='Products'/>
+      <CommoSection title='Products' />
     </Helmet>
   )
 }

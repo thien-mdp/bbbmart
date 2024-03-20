@@ -1,2 +1,2 @@
-import ImageMagnifier from "./ImageMagnifier";
-export default ImageMagnifier;
+import ImageMagnifier from './ImageMagnifier'
+export default ImageMagnifier

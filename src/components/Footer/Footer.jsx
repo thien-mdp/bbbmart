@@ -23,10 +23,9 @@ const Footer = () => {
             Tầng 14 Tòa nhà Phú Mỹ Hưng Tower, 08 Hoàng Văn Thái, P.Tân Phú, Q.7, HCM
           </div>
         </div>
-        <div className='flex items-center justify-between w-[60%]'>
-
-          <div className='font-ConCung text-2xl w-[50%] text-center'>
-            <h1 className=''>BBB Market</h1> 
+        <div className='flex items-start justify-between w-[60%]'>
+          <div className='font-ConCung text-2xl w-[50%] text-center pt-2 pb-4'>
+            <h1 className=''>BBB Market</h1>
             <div className='text-[15px] font-mono font-light'>
               <p className='cursor-pointer hover:text-yellow-500'>Giới thiệu về BBB</p>
               <p className='cursor-pointer hover:text-yellow-500'>Tuyển dụng khối cửa hàng</p>
@@ -36,7 +35,7 @@ const Footer = () => {
           </div>
 
           <div className='font-ConCung text-2xl w-[50%] text-center'>
-            <h1 className=''>Hỗ trợ khách hàng</h1> 
+            <h1 className='pt-2'>Hỗ trợ khách hàng</h1>
             <div className='text-[15px] font-mono font-light'>
               <p className='cursor-pointer hover:text-yellow-500'>Fanpage</p>
               <p className='cursor-pointer hover:text-yellow-500'>Mua & giao nhận online</p>
@@ -44,7 +43,6 @@ const Footer = () => {
               <p className='cursor-pointer hover:text-yellow-500'>Đổi trả & hoàn tiền</p>
             </div>
           </div>
-
         </div>
       </div>
     </div>

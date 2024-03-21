@@ -1,42 +1,30 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-
-// https://vitejs.dev/config/
-// export default defineConfig({
-//   plugins: [react()],
-//   server: {
-//     proxy: {
-//       '/api': {
-//         target: 'https://public.kiotapi.com',
-//         changeOrigin: true,
-//         rewrite: path => path.replace(/^\/api/, ''),
-//       },
-//     },
-//   },
-// });
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
 
 const defaultConfig = {
   plugins: [react()],
-}
+};
 
 export default defineConfig(({ command, mode }) => {
-  if (command === 'serve') {
-    const isDev = mode === 'development'
+  const isDev = mode === 'development';
 
+  if (command === 'serve' && isDev) {
+    // Mở rộng cấu hình mặc định với cấu hình proxy cho development mode
     return {
       ...defaultConfig,
       server: {
         proxy: {
           '/api': {
-            target: isDev ? 'https://public.kiotapi.com' : 'https://public.kiotapi.com',
+            target: 'https://public.kiotapi.com',
             rewrite: path => path.replace(/^\/api/, ''),
-            changeOrigin: isDev,
-            secure: !isDev
+            changeOrigin: true, // Luôn true để tránh vấn đề với CORS
+
           }
         }
       }
-    }
+    };
   } else {
-    return defaultConfig
+    // Trả về cấu hình mặc định nếu không phải là development mode hoặc command không phải là 'serve'
+    return defaultConfig;
   }
-})
+});

@@ -164,15 +164,15 @@ const Checkout = () => {
             </div>
             <div className='flex justify-between mr-5'>
               <p className='font-bold mr-5 min-w-fit'>Tiền hàng:</p>
-              <p className='min-w-fit'>{totalAmount} ₫</p>
+              <p className='min-w-fit'>{totalAmount.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</p>
             </div>
             <div className='flex justify-between mr-5'>
               <p className='font-bold mr-5 min-w-fit'>Vận chuyển:</p>
-              <p className='min-w-fit'>0 ₫</p>
+              <p className='min-w-fit'>0 VND</p>
             </div>
             <div className='flex justify-between mr-5 border-t-2 mt-5 py-2'>
               <p className='font-bold mr-5 min-w-fit'>Tổng cộng:</p>
-              <p className='min-w-fit'>{totalAmount} ₫</p>
+              <p className='min-w-fit'>{totalAmount.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</p>
             </div>
           </div>
           <div

@@ -17,7 +17,7 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <div className='bg-gray-50 xs:pt-5 sm:pt-1 pb-5 font-ConCung111'>
+      <div className='bg-gray-50 xs:pt-5 sm:pt-3 pb-5 font-ConCung111'>
         <Routers />
         <ScrollButton />
       </div>

@@ -17,7 +17,7 @@ const fetchBase = async (url) => {
         'Content-Type': 'application/json',
         'Retailer': 'bobebedn',
         'Authorization': `Bearer ${access_token}`,
-        'Access-Control-Allow-Origin': 'https://public.kiotapi.com'
+        'Access-Control-Allow-Origin': '*'
       },
     });
 

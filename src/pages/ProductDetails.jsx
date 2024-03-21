@@ -6,17 +6,19 @@ import Helmet from '../components/Helmet/Helmet'
 import CommoSection from '../components/UI/CommoSection'
 import ImageMagnifier from '../components/ImageMagnifier'
 import { TbShoppingCartPlus } from 'react-icons/tb'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { cartActions } from '../redux/slices/cartSlice'
 import ProductList from '../components/UI/ProductList'
 import { BsFillCaretRightFill } from 'react-icons/bs'
 import icon_hethang from '../assets/img/tam-het-hang.png'
 import TextArea from 'antd/es/input/TextArea'
+import fetchBase from '../api/fetchBase'
 
 const ProductDetails = () => {
   const { id } = useParams()
-  const [products, setProducts] = useState([])
+  const products = useSelector((state) => state.cart.products)
+  const [product, setProduct] = useState()
   const [rating, setRating] = useState([])
   const [loading, setLoading] = useState(true)
   const [listReview, setListReview] = useState([])
@@ -26,42 +28,43 @@ const ProductDetails = () => {
   const reviewUser = useRef()
   const reviewMsg = useRef()
 
-  const product = products.find((item) => item.id == id)
+  // const product = products.find((item) => item.id == id)
   const related = []
   const other = []
 
   const dispatch = useDispatch()
   // const product = products.find(item => item.id === id)
-  const fetchData = async () => {
-    const res = await axios('https://dummyjson.com/products?limit=100')
-    if (res.status == 200) {
-      setProducts(res.data.products)
-      setLoading(false)
-    }
-  }
 
+  const fetchData = async (id) => {
+    const res = await fetchBase(`/api/products/${id}`)
+    setProduct(res)
+    setLoading(false)
+  }
   useEffect(() => {
-    fetchData()
-  }, [])
-
-  products.filter((element) => {
-    if (element.category === product.category) {
-      related.push(element)
+    if (id) {
+      fetchData(id)
     }
-  })
+  }, [id])
 
-  for (let i = 4; i < products.length; i += 8) {
-    other.push(products[i])
+  if (product) {
+    products.filter((element) => {
+      if (element.categoryId === product.categoryId) {
+        related.push(element)
+      }
+    })
+
+    for (let i = 4; i < products.length; i += 12) {
+      other.push(products[i])
+    }
   }
-  // console.log(product)
 
   const addToCart = () => {
     dispatch(
       cartActions.addItem({
         id: product.id,
-        title: product.title,
-        price: product.price,
-        thumbnail: product.thumbnail,
+        title: product.fullName,
+        price: product.basePrice,
+        thumbnail: product.images?.[0],
         quantity: quantity
       })
     )
@@ -72,9 +75,9 @@ const ProductDetails = () => {
     dispatch(
       cartActions.addItem({
         id: product.id,
-        title: product.title,
-        price: product.price,
-        thumbnail: product.thumbnail,
+        title: product.fullName,
+        price: product.basePrice,
+        thumbnail: product.images?.[0],
         quantity: quantity
       })
     )
@@ -103,18 +106,19 @@ const ProductDetails = () => {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
   }
-  // console.log(product)
+  console.log('id', id)
+  console.log('product', product)
   // const {img, title, price, rating, review, description} = product;
 
   return (
-    <Helmet title={`${product ? product.title : ''}`}>
+    <Helmet title={`${product ? product.fullName : ''}`}>
       <CommoSection />
       {!loading ? (
         <section className='xs:mx-2 md:mx-[10%] min-h-[90vh] font-mono'>
           <div className='flex my-10'>
             <div className='w-[65%] flex'>
               <div className='w-[10%] max-h-[400px]'>
-                {product?.images.slice(0, 3).map((item, index) => (
+                {product?.images.map((item, index) => (
                   <img key={index} className='object-cover mx-auto min-w-full my-1 h-auto max-h-[100px] cursor-pointer' src={item} />
                 ))}
               </div>
@@ -124,26 +128,28 @@ const ProductDetails = () => {
             </div>
 
             <div className='w-[35%] ml-10'>
-              {product.stock > 0 ? null : (
+              {product.inventories[0].onHand > 0 ? null : (
                 <h1 className='py-2 absolute z-50'>
                   <img src={icon_hethang} className='w-auto' />
                 </h1>
               )}
               <div className='flex items-baseline'>
-                <h1 className='text-4xl min-w-fit font-ConCung'>{product.title}</h1>
+                <h1 className='text-4xl min-w-fit font-ConCung'>{product.fullName}</h1>
               </div>
               <div className='py-2 xs:grid 2xl:flex items-end'>
-                <Rate disabled allowHalf defaultValue={product.rating} className='xs:text-sm sm:text-xl mr-5' />
+                <Rate disabled allowHalf defaultValue={product?.rating || 5} className='xs:text-sm sm:text-xl mr-5' />
                 <p className='text-md '>(203 Đánh giá)</p>
               </div>
               <div className='flex justify-between items-center'>
-                <h1 className=' font-bold py-2 text-xl'>{product.price},000 ₫</h1>
+                <h1 className=' font-bold py-2 text-xl'>
+                  {product.basePrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
+                </h1>
               </div>
               <div className='py-2 '>
                 <div className='xs:grid lg:flex items-center'>
                   <InputNumber
                     min={1}
-                    max={product.stock}
+                    max={product.inventories[0].onHand}
                     defaultValue={1}
                     onChange={(value) => setQuantity(value)}
                     className='min-w-[40px] w-auto'
@@ -161,28 +167,15 @@ const ProductDetails = () => {
               </div>
               <h1 className='py-2 flex'>
                 <p className='font-bold min-w-fit mr-5'>Thương hiệu:</p>
-                {product.brand}
+                {product?.inventories[0]?.branchName}
               </h1>
             </div>
           </div>
           <div>
             <p className='py-2 text-2xl mr-2 min-w-fit font-ConCung'>Mô tả sản phẩm: </p>
             <p className='font-base mt-5'>{product.description}</p>
-            <img className='object-cover mx-auto w-[50%] my-5 h-auto cursor-pointer' src={product.images?.[1]} />
-            <p className='font-base'>
-              Khăn ướt Mamamy với thiết kế nhỏ gọn, tiện cầm tay và đút túi dùng trong những chuyến đi xa, du lịch cùng gia đình, bè bạn.
-              Sản phẩm có nắp đậy giúp giữ ẩm và bảo quản khăn, tránh nhiễm khuẩn ngược. Khăn ướt VS Mamamy 100 tờ, có nắp, không mùi Vải
-              không dệt,hàm lượng sợi 60%, dầy, mềm mại không xơ, độ đàn hồi cao, dẫn xuất đường glucose từ nho thiên nhiên giúp giữ ẩm và
-              làm mềm da được cấp bằng sáng chế số US8877703B2 của hoa kỳ,coco phospatidyl PG - Dimonium chloride có tác dụng chống hăm,
-              chống rôm sẩy được cấp bằng sáng chế số US 7803746B2 của hoa kỳ, chlorhexidine gluconate solution* có tác dụng kháng khuẩn WHO
-              chỉ định trong nước xúc miệng, thích hợp cho da em bé kể cả da nhạy cảm Thành phần : Vải không dệt, nước tinh khiết 99,9%,
-              coco phospatidyl PG - Dimonium chloride, stearyldimoniumhydroxypropyl laurylgluccosides chloride, chlorhexidine gluconate
-              solution* (13 - tetraazatertradecanediimidamide 4 - chlorophenyl, 12 diimi - no - di -D - gluconate; hexamethlenebis THÔNG TIN
-              SẢN PHẨM Thương hiệu : Mamamy Nơi sản xuất : Việt Nam Số lượng : 100 tờ / gói Kích thước: 200mm* 150mm HƯỚNG DẪN SỬ DỤNG Mở
-              nắp, bóc bỏ miếng decal phía trong, rút từng chiếc khăn sử dụng. Sau khi sử dụng xong đóng nắp lại để giữ ẩm và chống nhiễm
-              khuẩn HƯỚNG DẪN BẢO QUẢN Bảo quản nơi khô mát, tránh ánh nắng trực tiếp và những nơi có nhiệt độ cao Chú ý : Sản phẩm không
-              tan trong nước
-            </p>
+            <img className='object-cover mx-auto w-[50%] my-5 h-auto cursor-pointer' src={product.images?.[0]} />
+            <p className='font-base'>Mô tả chi tiết sản phẩm</p>
           </div>
           <Divider />
           <div className='my-10'>

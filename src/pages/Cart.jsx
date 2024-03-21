@@ -42,7 +42,10 @@ const Cart = () => {
       title: 'Giá',
       dataIndex: 'price',
       key: 'price',
-      width: '15%'
+      width: '15%',
+      render: (text) => (
+        <div className='w-full flex justify-center'>{text.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</div>
+      )
     },
     {
       title: 'Số lượng',
@@ -53,7 +56,11 @@ const Cart = () => {
     {
       title: 'Tổng tiền',
       width: '20%',
-      render: (text, row) => <div className='w-full flex justify-center'>{row.quantity * row.price} đ</div>
+      render: (text, row) => (
+        <div className='w-full flex justify-center'>
+          {(row.quantity * row.price).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
+        </div>
+      )
     },
     {
       title: 'Xóa',
@@ -70,7 +77,7 @@ const Cart = () => {
         title='Không có sản phẩm nào trong giỏ hàng của bạn'
         subTitle='Hôm nay có rất nhiều sản phẩm ưu đãi đấy !!'
         extra={[
-          <Button href='/home' className='bg-blue-600 h-10 font-ConCung  text-2xl' type='primary'>
+          <Button onClick={() => navigateToHome()} className='bg-blue-600 h-10 font-ConCung  text-2xl' type='primary'>
             Tiếp tục mua sắm{' '}
           </Button>
         ]}
@@ -98,17 +105,17 @@ const Cart = () => {
               <div className='h-5 bg-gray-300 rounded-b-lg sticky'></div>
               <div className='bg-white border border-solid border-gray mx-3 py-5 relative bottom-3 text-lg'>
                 <div className='flex flex-col w-full mx-3'>
-                  <div className='flex justify-around mr-5'>
+                  <div className='flex justify-between mx-5'>
                     <p className='font-bold mr-5 min-w-fit'>Tiền hàng:</p>
-                    <p className='min-w-fit'>{totalAmount} ₫</p>
+                    <p className='min-w-fit'>{totalAmount.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })} ₫</p>
                   </div>
-                  <div className='flex justify-around mr-5'>
+                  <div className='flex justify-between mx-5'>
                     <p className='font-bold mr-5 min-w-fit'>Vận chuyển:</p>
-                    <p className='min-w-fit'>10000 ₫</p>
+                    <p className='min-w-fit'>0 VND</p>
                   </div>
-                  <div className='flex justify-around mr-5 border-y-2 my-5 py-2'>
+                  <div className='flex justify-between mx-5 border-y-2 my-5 py-2'>
                     <p className='font-bold mr-5 min-w-fit'>Tổng cộng:</p>
-                    <p className='min-w-fit'>{totalAmount + 10000} ₫</p>
+                    <p className='min-w-fit'>{totalAmount.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</p>
                   </div>
                 </div>
                 {/* <Divider /> */}

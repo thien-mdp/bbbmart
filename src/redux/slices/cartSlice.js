@@ -3,6 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   cartItems: [],
   categories: [],
+  products: [],
+  productsFilter: [],
+  productsFilterStatus: false,
+  loading: true,
   totalAmount: 0,
   totalQuantity: 0,
   filterCategory: ''
@@ -12,6 +16,18 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
+    setLoading: (state, action) => {
+      state.loading = action.payload
+    },
+    setProducts: (state, action) => {
+      state.products = action.payload
+    },
+    setProductsFilter: (state, action) => {
+      state.productsFilter = action.payload
+    },
+    setProductsFilterStatus: (state, action) => {
+      state.productsFilterStatus = action.payload
+    },
     setCategories: (state, action) => {
       state.categories = action.payload
     },

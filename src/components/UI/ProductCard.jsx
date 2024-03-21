@@ -25,9 +25,9 @@ const ProductCard = ({ item }) => {
     dispatch(
       cartActions.addItem({
         id: item.id,
-        title: item.title,
-        price: item.price,
-        thumbnail: item.thumbnail
+        title: item.fullName,
+        price: item.basePrice,
+        thumbnail: item.images?.[0]
       })
     )
 
@@ -42,7 +42,7 @@ const ProductCard = ({ item }) => {
             loading='auto'
             alt='product image transition duration-500 ease-in-out'
             className='scale-100 hover:scale-[0.85] ease-in-out duration-500 max-h-[220px] h-full w-full bg-cover min-w-auto rounded-[5px]'
-            src={item.thumbnail}
+            src={item.images?.[0] || 'https://grafgearboxes.com/productos/images/df.jpg'}
           />
         </p>
         <div className='h-7 bottom-[-6px] z-1 absolute'>
@@ -50,9 +50,11 @@ const ProductCard = ({ item }) => {
         </div>
       </div>
       <div className='px-4 pb-2'>
-        <p className='truncate hover:text-blue-800'>{item.title}</p>
+        <p className='truncate hover:text-blue-800'>{item.fullName}</p>
         <div className='flex justify-between items-center mt-1'>
-          <p className='cursor-default w-[80%] mb-[-5px]'>{item.price},000 ₫</p>
+          <p className='cursor-default w-[80%] mb-[-5px]'>
+            {item.basePrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
+          </p>
           <BsFillBagPlusFill onClick={addToCart} className='text-xl hover:text-red-600 font-bold' />
         </div>
       </div>

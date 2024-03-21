@@ -1,67 +1,46 @@
 import { Carousel, Skeleton } from 'antd'
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { BsFillCaretRightFill } from 'react-icons/bs'
 import { IoMdFlash } from 'react-icons/io'
 import Helmet from '../components/Helmet/Helmet'
 import Clock from '../components/UI/Clock'
 import ProductList from '../components/UI/ProductList'
-import axiosApi from '../api/axiosApi'
-import Cookies from 'js-cookie'
-import fetchBase from '../api/fetchBase'
+import { useSelector } from 'react-redux'
 
 const Home = () => {
-  const [products, setProducts] = useState([])
-  const [fragrances, setFragrances] = useState([])
-  const [smartphones, setSmartphones] = useState([])
-  const [laptops, setLaptops] = useState([])
-  const [skincare, setSkincare] = useState([])
-  const [groceries, setGroceries] = useState([])
   const [flashSale, setFlashSale] = useState([])
-  const [homeDecoration, setHomeDecoration] = useState([])
-  const [loading, setLoading] = useState(true)
 
-  const fetchDataProduct = async () => {
-    const res = await fetchBase('/api/products?pageSize=100')
-    console.log('product', res.data)
+  const loading = useSelector((state) => state.cart.loading)
+  const products = useSelector((state) => state.cart.products)
+  const productsFilter = useSelector((state) => state.cart.productsFilter)
+  const productsFilterStatus = useSelector((state) => state.cart.productsFilterStatus)
+
+  const groupProductsByCategory = (products) => {
+    return products.reduce((acc, product) => {
+      if (!acc[product.categoryId]) {
+        acc[product.categoryId] = []
+      }
+      acc[product.categoryId].push(product)
+      return acc
+    }, {})
   }
+  const groupedProducts = groupProductsByCategory(products)
+  // console.log('productsFilterStatus', productsFilterStatus)
+  // console.log('groupedProducts', groupedProducts)
+  // console.log('products', products)
+  console.log('loading', loading)
+  // console.log('productsFilter', productsFilter)
 
-  const fetchData = async () => {
-    const res = await axios('https://dummyjson.com/products?limit=100')
-    if (res.status == 200) {
-      setProducts(res.data.products)
-      setLoading(false)
-    }
-  }
   useEffect(() => {
-    fetchData()
-    fetchDataProduct()
-  }, [])
-  useEffect(() => {
-    const filteredProducts = products.filter((item) => item.category === 'fragrances')
-    const smartphones = products.filter((item) => item.category === 'smartphones')
-    const laptops = products.filter((item) => item.category === 'laptops')
-    const skincare = products.filter((item) => item.category === 'skincare')
-    const groceries = products.filter(
-      (item) =>
-        item.category !== 'fragrances' && item.category !== 'smartphones' && item.category !== 'laptops' && item.category !== 'skincare'
-    )
-    const homeDecoration = products.filter((item) => item.category === 'home-decoration')
-    const fls = []
+    if (products) {
+      const fls = []
 
-    for (let i = 0; i < products.length; i += 9) {
-      fls.push(products[i])
+      for (let i = 50; i < products.length; i += 50) {
+        fls.push(products[i])
+      }
+      setFlashSale(fls)
     }
-    setFlashSale(fls)
-    setFragrances(filteredProducts)
-    setSmartphones(smartphones)
-    setLaptops(laptops)
-    setSkincare(skincare)
-    setGroceries(groceries)
-    setHomeDecoration(homeDecoration)
   }, [products])
-
-  // console.log(flashSale)
   return (
     <Helmet title={'Trang chủ'}>
       <section className='hero__section '>
@@ -72,28 +51,31 @@ const Home = () => {
                 <div>
                   <img
                     className='w-full h-[400px] bg-cover rounded-lg'
-                    src={'https://ss-hn.fptvds.vn/images/2023/02/home-banner_867-x-400.jpg'}
+                    src={'https://cdn1.concung.com/img/adds/2024/03/1710752920-HOME(1).png'}
                   />
                 </div>
                 <div>
                   <img
                     className='w-full h-[400px] bg-cover rounded-lg'
-                    src={'https://ss-hn.fptvds.vn/images/2023/02/867x400_a1-20230223030103.jpg'}
+                    src={'https://cdn1.concung.com/img/adds/2024/02/1709122107-HOME(2).png'}
                   />
                 </div>
                 <div>
                   <img
                     className='w-full h-[400px] bg-cover rounded-lg'
-                    src={'https://ss-hn.fptvds.vn/images/2023/02/home-banner_867-x-400.jpg'}
+                    src={'https://cdn1.concung.com/img/adds/2024/03/1709628664-HOME.png'}
                   />
-                </div>
-                <div>
-                  <img className='w-full h-[400px] bg-cover rounded-lg' src={'https://ss-hn.fptvds.vn/images/2023/02/867x400_web.jpg'} />
                 </div>
                 <div>
                   <img
                     className='w-full h-[400px] bg-cover rounded-lg'
-                    src={'https://ss-hn.fptvds.vn/images/2022/main-banner-_trao-rau-cu-qua-sach-01.jpg'}
+                    src={'https://cdn1.concung.com/img/adds/2024/02/1708596409-HOME(2).png'}
+                  />
+                </div>
+                <div>
+                  <img
+                    className='w-full h-[400px] bg-cover rounded-lg'
+                    src={'https://cdn1.concung.com/img/adds/2024/02/1708592066-HOMEPAGEMAINBANNER980x320(5).png'}
                   />
                 </div>
               </Carousel>
@@ -110,17 +92,71 @@ const Home = () => {
               />
             </div> */}
           </div>
-
+          {productsFilterStatus && (
+            <>
+              <div className='w-full xs:bg-transparent md:bg-white rounded-xl my-6'>
+                <h1 className='text-2xl font-bold p-2 ml-7 pt-6 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
+                  {loading ? (
+                    <Skeleton.Input active size='large' />
+                  ) : (
+                    <>
+                      {productsFilter?.[0]?.categoryName} <BsFillCaretRightFill className='ml-1' />
+                    </>
+                  )}
+                </h1>
+                {loading ? (
+                  <div className='grid grid-cols-3'>
+                    <div className='col-span-1 flex justify-center'>
+                      <Skeleton.Image className='m-5' active size='large' />
+                    </div>
+                    <div className='col-span-1 flex justify-center'>
+                      <Skeleton.Image className='m-5' active size='large' />
+                    </div>
+                    <div className='col-span-1 flex justify-center'>
+                      <Skeleton.Image className='m-5' active size='large' />
+                    </div>
+                    <div className='col-span-1 flex justify-center'>
+                      <Skeleton.Image className='m-5' active size='large' />
+                    </div>
+                    <div className='col-span-1 flex justify-center'>
+                      <Skeleton.Image className='m-5' active size='large' />
+                    </div>
+                    <div className='col-span-1 flex justify-center'>
+                      <Skeleton.Image className='m-5' active size='large' />
+                    </div>
+                  </div>
+                ) : (
+                  <ProductList data={productsFilter} />
+                )}
+              </div>
+            </>
+          )}
           <>
-            <h1 className='xs:text-xl sm:text-3xl font-bold p-2 text-red-600 flex items-center cursor-pointer max-w-max'>
-              Flash <IoMdFlash className='!text-yellow-400 xs:text-2xl sm:text-5xl rotate-12' /> Sale :
-              <Clock />
-            </h1>
-
-            <div className='w-full xs:bg-transparent md:bg-white rounded-xl'>
-              {loading ? (
-                <div className='flex w-full justify-between items-center'>
-                  <Skeleton className='m-5' active size='large' />
+            <div className='w-full xs:bg-transparent md:bg-white rounded-xl my-6'>
+              <h1 className='xs:text-xl sm:text-3xl font-bold p-2 ml-7 pt-6 text-red-600 flex items-center cursor-pointer max-w-max'>
+                Giá <IoMdFlash className='!text-yellow-400 xs:text-2xl sm:text-5xl rotate-12' /> Sốc :
+                <Clock />
+              </h1>
+              {loading && !flashSale ? (
+                <div className='grid grid-cols-3'>
+                  <div className='col-span-1 flex justify-center'>
+                    <Skeleton.Image className='m-5' active size='large' />
+                  </div>
+                  <div className='col-span-1 flex justify-center'>
+                    <Skeleton.Image className='m-5' active size='large' />
+                  </div>
+                  <div className='col-span-1 flex justify-center'>
+                    <Skeleton.Image className='m-5' active size='large' />
+                  </div>
+                  <div className='col-span-1 flex justify-center'>
+                    <Skeleton.Image className='m-5' active size='large' />
+                  </div>
+                  <div className='col-span-1 flex justify-center'>
+                    <Skeleton.Image className='m-5' active size='large' />
+                  </div>
+                  <div className='col-span-1 flex justify-center'>
+                    <Skeleton.Image className='m-5' active size='large' />
+                  </div>
                 </div>
               ) : (
                 <ProductList data={flashSale} />
@@ -128,101 +164,20 @@ const Home = () => {
             </div>
           </>
 
-          <>
-            <h1 className='text-2xl font-bold p-2 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
-              Nước hoa <BsFillCaretRightFill className='ml-1' />
-            </h1>
-
-            <div className='w-full xs:bg-transparent md:bg-white rounded-xl'>
-              {loading ? (
-                <div className='flex w-full justify-between items-center'>
-                  <Skeleton className='m-5' active size='large' />
+          {!productsFilterStatus && (
+            <>
+              {Object.keys(groupedProducts).map((categoryId) => (
+                <div key={categoryId}>
+                  <div className='w-full xs:bg-transparent md:bg-white rounded-xl my-6'>
+                    <h1 className='text-2xl font-bold p-2 ml-7 pt-6 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
+                      {groupedProducts[categoryId][0].categoryName} <BsFillCaretRightFill className='ml-1' />
+                    </h1>
+                    <ProductList data={groupedProducts[categoryId]} />
+                  </div>
                 </div>
-              ) : (
-                <ProductList data={fragrances} />
-              )}
-            </div>
-          </>
-
-          <>
-            <h1 className='text-2xl font-bold p-2 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
-              Điện thoại di động <BsFillCaretRightFill className='ml-1' />
-            </h1>
-
-            <div className='w-full xs:bg-transparent md:bg-white rounded-xl'>
-              {loading ? (
-                <div className='flex w-full justify-between items-center'>
-                  <Skeleton className='m-5' active size='large' />
-                </div>
-              ) : (
-                <ProductList data={smartphones} />
-              )}
-            </div>
-          </>
-
-          <>
-            <h1 className='text-2xl font-bold p-2 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
-              Laptops - Máy tính bảng <BsFillCaretRightFill className='ml-1' />
-            </h1>
-
-            <div className='w-full xs:bg-transparent md:bg-white rounded-xl'>
-              {loading ? (
-                <div className='flex w-full justify-between items-center'>
-                  <Skeleton className='m-5' active size='large' />
-                </div>
-              ) : (
-                <ProductList data={laptops} />
-              )}
-            </div>
-          </>
-
-          <>
-            <h1 className='text-2xl font-bold p-2 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
-              Chăm sóc da <BsFillCaretRightFill className='ml-1' />
-            </h1>
-
-            <div className='w-full xs:bg-transparent md:bg-white rounded-xl'>
-              {loading ? (
-                <div className='flex w-full justify-between items-center'>
-                  <Skeleton className='m-5' active size='large' />
-                </div>
-              ) : (
-                <ProductList data={skincare} />
-              )}
-            </div>
-          </>
-
-          <>
-            <h1 className='text-2xl font-bold p-2 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
-              Trang trí <BsFillCaretRightFill className='ml-1' />
-            </h1>
-
-            <div className='w-full xs:bg-transparent md:bg-white rounded-xl'>
-              {loading ? (
-                <div className='flex w-full justify-between items-center'>
-                  <Skeleton className='m-5' active size='large' />
-                </div>
-              ) : (
-                <ProductList data={homeDecoration} />
-              )}
-            </div>
-          </>
-
-          <>
-            <h1 className='text-2xl font-bold p-2 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
-              Sản phẩm khác <BsFillCaretRightFill className='ml-1' />
-            </h1>
-
-            <div className='w-full xs:bg-transparent md:bg-white rounded-xl'>
-              {loading ? (
-                <div className='flex w-full justify-between items-center'>
-                  <Skeleton className='m-5' active size='large' />
-                </div>
-              ) : (
-                <ProductList data={groceries} />
-              )}
-            </div>
-          </>
+              ))}
+            </>
+          )}
         </div>
       </section>
     </Helmet>

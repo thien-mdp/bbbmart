@@ -25,11 +25,9 @@ const Header = () => {
   const { currentUser } = useAuth()
   const cartItems = useSelector((state) => state.cart.cartItems)
   const categories = useSelector((state) => state.cart.categories)
-  // const totalQuantity = useSelector((state) => state.cart.totalQuantity)
+  const products = useSelector((state) => state.cart.products)
 
   const [inputValue, setInputValue] = useState()
-
-  console.log('categories', categories)
 
   const transformedCategories = handleTransformCategories(categories)
   const stickyHeaderFunc = () => {
@@ -42,9 +40,67 @@ const Header = () => {
     })
   }
   const fetchCategories = async () => {
-    const res = await fetchBase('/api/categories')
+    const res = await fetchBase('/api/categories?pageSize=100')
     dispatch(cartActions.setCategories(res.data))
   }
+  const fetchDataProduct = async (id) => {
+    try {
+      const res = await fetchBase(`/api/products?${id && 'categoryId=' + id + '&'}pageSize=20&isActive=true`)
+      return res.data
+    } catch (error) {
+      console.error('Error fetching product:', error)
+      return [] // Trả về mảng rỗng nếu có lỗi
+    }
+  }
+  const fetchDataProductFilter = async (id) => {
+    try {
+      const res = await fetchBase(`/api/products?${id && 'categoryId=' + id + '&'}pageSize=1000&isActive=true`)
+      if (res.data) {
+        dispatch(cartActions.setProductsFilter(res.data))
+        dispatch(cartActions.setLoading(false))
+      } else {
+        dispatch(cartActions.setLoading(false))
+      }
+      return res.data
+    } catch (error) {
+      console.error('Error fetching product:', error)
+      return [] // Trả về mảng rỗng nếu có lỗi
+    }
+  }
+  useEffect(() => {
+    fetchCategories()
+    stickyHeaderFunc()
+    return () => window.removeEventListener('scroll', stickyHeaderFunc)
+  }, [])
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      Promise.all(categories.map((item) => fetchDataProduct(item.categoryId)))
+        .then((results) => {
+          const allProducts = results.flat() // Dùng flat() để làm phẳng mảng của mảng
+          dispatch(cartActions.setProducts(allProducts))
+          dispatch(cartActions.setLoading(false))
+        })
+        .catch((error) => {
+          console.error('Error fetching all products:', error)
+        })
+    }
+  }, [categories])
+  // useEffect(() => {
+  //   if (products && products.length > 0) {
+  //     const filteredProducts = products.filter((item) => item.categoryId === inputValue)
+  //     dispatch(cartActions.setProductsFilter(filteredProducts))
+  //   }
+  // }, [products, inputValue])
+  // console.log('inputValue', inputValue)
+  useEffect(() => {
+    if (inputValue) {
+      fetchDataProductFilter(inputValue)
+      dispatch(cartActions.setLoading(true))
+      dispatch(cartActions.setProductsFilterStatus(true))
+    } else {
+      dispatch(cartActions.setProductsFilterStatus(false))
+    }
+  }, [inputValue])
   const logout = () => {
     signOut(auth)
       .then(() => {
@@ -65,16 +121,11 @@ const Header = () => {
       key: '1'
     }
   ]
-  useEffect(() => {
-    fetchCategories()
-    stickyHeaderFunc()
-    return () => window.removeEventListener('scroll', stickyHeaderFunc)
-  }, [])
 
   return (
     <>
       <div className='h-[80px]'>
-        <img className='h-full bg-cover w-full invert' src='https://concung.com//img/adds/2023/02/1677569888-CASHBACK-TOP.png' />
+        <img className='h-full bg-cover w-full invert333' src='https://cdn1.concung.com/img/adds/2024/03/1710752871-TOP.png' />
       </div>
       <div ref={headerRef} className='bg-teal-700 sm:h-[80px] md:h-[80px] z-[140] flex items-center font-ConCung w-full top-0 left-0'>
         <div className='xs:mx-[5%] md:mx-[10%] flex items-center justify-between w-full'>
@@ -93,6 +144,7 @@ const Header = () => {
                 placeholder='Tôi muốn mua'
                 optionFilterProp='children'
                 allowClear
+                value={inputValue}
                 onChange={(value) => setInputValue(value)}
                 filterOption={(input, option) => (option?.label ?? '').includes(input)}
                 filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())}

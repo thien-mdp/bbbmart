@@ -50,31 +50,31 @@ const Home = () => {
               <Carousel infinite autoplay effect='fade' speed='800' autoplaySpeed={2500}>
                 <div>
                   <img
-                    className='w-full h-[400px] bg-cover rounded-lg'
+                    className='w-full xs:h-[200px] md:h-[250px] lg:h-[300px] xl:h-[400px] bg-cover rounded-lg'
                     src={'https://cdn1.concung.com/img/adds/2024/03/1710752920-HOME(1).png'}
                   />
                 </div>
                 <div>
                   <img
-                    className='w-full h-[400px] bg-cover rounded-lg'
+                    className='w-full xs:h-[200px] md:h-[250px] lg:h-[300px] xl:h-[400px] bg-cover rounded-lg'
                     src={'https://cdn1.concung.com/img/adds/2024/02/1709122107-HOME(2).png'}
                   />
                 </div>
                 <div>
                   <img
-                    className='w-full h-[400px] bg-cover rounded-lg'
+                    className='w-full xs:h-[200px] md:h-[250px] lg:h-[300px] xl:h-[400px] bg-cover rounded-lg'
                     src={'https://cdn1.concung.com/img/adds/2024/03/1709628664-HOME.png'}
                   />
                 </div>
                 <div>
                   <img
-                    className='w-full h-[400px] bg-cover rounded-lg'
+                    className='w-full xs:h-[200px] md:h-[250px] lg:h-[300px] xl:h-[400px] bg-cover rounded-lg'
                     src={'https://cdn1.concung.com/img/adds/2024/02/1708596409-HOME(2).png'}
                   />
                 </div>
                 <div>
                   <img
-                    className='w-full h-[400px] bg-cover rounded-lg'
+                    className='w-full xs:h-[200px] md:h-[250px] lg:h-[300px] xl:h-[400px] bg-cover rounded-lg'
                     src={'https://cdn1.concung.com/img/adds/2024/02/1708592066-HOMEPAGEMAINBANNER980x320(5).png'}
                   />
                 </div>
@@ -94,8 +94,8 @@ const Home = () => {
           </div>
           {productsFilterStatus && (
             <>
-              <div className='w-full xs:bg-transparent md:bg-white rounded-xl my-6'>
-                <h1 className='text-2xl font-bold p-2 ml-7 pt-6 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
+              <div className='w-full xs:bg-transparent 111md:bg-white rounded-xl xs:my-3 lg:my-6'>
+                <h1 className='text-2xl font-bold p-2 xs:ml-3 lg:ml-7 xs:pt-3 lg:pt-6 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
                   {loading ? (
                     <Skeleton.Input active size='large' />
                   ) : (
@@ -132,8 +132,8 @@ const Home = () => {
             </>
           )}
           <>
-            <div className='w-full xs:bg-transparent md:bg-white rounded-xl my-6'>
-              <h1 className='xs:text-xl sm:text-3xl font-bold p-2 ml-7 pt-6 text-red-600 flex items-center cursor-pointer max-w-max'>
+            <div className='w-full xs:bg-transparent 111md:bg-white rounded-xl xs:my-3 lg:my-6'>
+              <h1 className='xs:text-xl sm:text-3xl font-bold p-2 xs:ml-3 lg:ml-7 xs:pt-3 lg:pt-6 text-red-600 flex items-center cursor-pointer max-w-max'>
                 Giá <IoMdFlash className='!text-yellow-400 xs:text-2xl sm:text-5xl rotate-12' /> Sốc :
                 <Clock />
               </h1>
@@ -168,8 +168,8 @@ const Home = () => {
             <>
               {Object.keys(groupedProducts).map((categoryId) => (
                 <div key={categoryId}>
-                  <div className='w-full xs:bg-transparent md:bg-white rounded-xl my-6'>
-                    <h1 className='text-2xl font-bold p-2 ml-7 pt-6 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
+                  <div className='w-full xs:bg-transparent 111md:bg-white rounded-xl xs:my-3 lg:my-6'>
+                    <h1 className='text-2xl font-bold p-2 xs:ml-3 lg:ml-7 xs:pt-3 lg:pt-6 text-red-600 flex items-center underline underline-offset-8 cursor-pointer max-w-max'>
                       {groupedProducts[categoryId][0].categoryName} <BsFillCaretRightFill className='ml-1' />
                     </h1>
                     <ProductList data={groupedProducts[categoryId]} />

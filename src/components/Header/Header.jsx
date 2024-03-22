@@ -94,6 +94,7 @@ const Header = () => {
   // console.log('inputValue', inputValue)
   useEffect(() => {
     if (inputValue) {
+      navigate('/')
       fetchDataProductFilter(inputValue)
       dispatch(cartActions.setLoading(true))
       dispatch(cartActions.setProductsFilterStatus(true))
